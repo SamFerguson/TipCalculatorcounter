@@ -6,9 +6,14 @@
     <string name="a12">12.5</string>
     <string name="a15">15</string>
     <string name="a20">20</string>
-    <string name="custom">Custom Amount:</string>
+    <string name="custom">Custom tip amt:</string>
     <string name="reset">Reset</string>
-
+    <string name="cButton">Custom</string>
+    <string name="friendInput">How many friends do you have?</string>
+    <string name="money">$ per person</string>
+    <string name="percet">%</string>
+    <string name="output">Please enter something</string>
+    <string name="total">Cost of food?</string>
 
 
 </resources>
