@@ -15,6 +15,8 @@
     <string name="output">Please enter something</string>
     <string name="total">Cost of food?</string>
 
-    <string name="fuck">fuck</string>
+    <string name="calculate">calculate</string>
+    <string name="cost">Total Cost:</string>
+
 
 </resources>

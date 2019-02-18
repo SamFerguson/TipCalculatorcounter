@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Button twenty;
     Button custom;
     Button reset;
+    Button calculate;
     boolean hasTyped = false;
     TextView hello;
     EditText cost;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     int people;
     double tip;
     double costnum;
+    boolean usingCustom = false;
+    boolean validInput = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,100 +40,125 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //make all of the view stuff that matters
-        ten = (Button) findViewById(R.id.button3);
-        twelve = (Button) findViewById(R.id.button4);
-        fifteen = (Button) findViewById(R.id.button5);
-        twenty = (Button) findViewById(R.id.button6);
-        custom = (Button) findViewById(R.id.button7);
+
         reset = (Button) findViewById(R.id.button8);
         hello = (TextView) findViewById(R.id.textView5);
         cost = (EditText) findViewById(R.id.editText2);
         tipAmt = (EditText) findViewById(R.id.editText);
         numFriends = (EditText) findViewById(R.id.editText3);
-
+        calculate = (Button) findViewById(R.id.calculate);
         debug = (TextView) findViewById(R.id.textView7);
+        ten = (Button) findViewById(R.id.radioButton5);
+        twelve = (Button) findViewById(R.id.radioButton4);
+        fifteen = (Button) findViewById(R.id.radioButton);
+        twenty = (Button) findViewById(R.id.radioButton7);
+        custom = (Button) findViewById(R.id.radioButton8);
 
+        numFriends.setOnKeyListener(mKeyListener);
+        tipAmt.setOnKeyListener(mKeyListener);
+        cost.setOnKeyListener(mKeyListener);
 
+        calculate.setEnabled(false);
 
         ten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(people != 0 || tip != 0.0 || costnum != 0) {
-                    tip = 10.0;
-                    CharSequence print = Double.toString(calculate(people,tip,costnum));
-                    hello.setText(print);
-                }
+                usingCustom = false;
+                calculate.setEnabled(false);
+                tip = 10.0;
             }
         });
         twelve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(people != 0 || tip != 0.0 || costnum != 0) {
-                    tip = 12.5;
-                    CharSequence print = Double.toString(calculate(people,tip,costnum));
-                    hello.setText(print);
-                }
-
+                usingCustom = false;
+                calculate.setEnabled(false);
+                tip = 12.5;
             }
         });
         fifteen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(people != 0  || costnum != 0) {
-                    tip = 15.0;
-                    CharSequence print = Double.toString(calculate(people,tip,costnum));
-                    hello.setText(print);
-                }
-
+                usingCustom = false;
+                calculate.setEnabled(false);
+                tip = 15.0;
             }
         });
         twenty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(people != 0  || costnum != 0) {
-                    tip = 20.0;
-                    CharSequence print = Double.toString(calculate(people,tip,costnum));
-                    hello.setText(print);
-                }
+                usingCustom = false;
+                calculate.setEnabled(false);
+                tip = 20.0;
             }
         });
+
         custom.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                if(people != 0 || tip != 0.0 || costnum != 0) {
-                    CharSequence print = Double.toString(calculate(people,tip,costnum));
-                    hello.setText(print);
+                usingCustom = true;
+                calculate.setEnabled(true);
+                try {
+                    tip = Double.parseDouble(calculate.getText().toString());
                 }
+                catch(NumberFormatException n){
+                    System.out.print("nothing");
+                }
+
             }
         });
-        numFriends.setOnKeyListener(mKeyListener);
-        tipAmt.setOnKeyListener(mKeyListener);
-        numFriends.setOnKeyListener(mKeyListener);
-
+        calculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double finalans = calculate(Integer.parseInt(numFriends.getText().toString()),
+                        Double.parseDouble(tipAmt.getText().toString()),
+                        Double.parseDouble(cost.getText().toString()));
+                System.out.println("FINAL TIP:   " + finalans);
+            }
+        });
 
 
 
     }
+
+
     private View.OnKeyListener mKeyListener = new View.OnKeyListener() {
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) throws NumberFormatException {
 
             switch (v.getId()) {
                 case R.id.editText2: //the asks the cost
-                    if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER ||keyCode == KeyEvent.KEYCODE_5) {
-                        System.out.println("hey look you're doing something");
 
-                }
-                case R.id.editText3: //this is the friends
+                    if(numFriends.getText().toString().length() > 0 && !usingCustom) {
+                        System.out.println("you're here!");
+                        calculate.setEnabled(true);
+
+                    }
+
+
+                    /*    costnum = Double.parseDouble(cost.getText().toString());
+                        System.out.println(costnum);
+                    */
+
+                case R.id.editText3://this is the friends
+
+
+
 
                 case R.id.editText: //this is the custom amount keying
+                    if(cost.getText().toString().length() >0 && usingCustom){
+                        System.out.println("it's workin baby");
+                        calculate.setEnabled(true);
+                    }
             }
-            return true;
+            return false;
+
         }
 
     };
     private double calculate(int numPeeps, double tip, double cost){
-        return ((cost * tip)/numPeeps);
+        return ((cost * tip)/numPeeps)/100;
     }
 
 
