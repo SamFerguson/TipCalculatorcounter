@@ -111,9 +111,14 @@ public class MainActivity extends AppCompatActivity {
         calculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double finalans = calculate(Integer.parseInt(numFriends.getText().toString()),
+                double finalans;
+                if(usingCustom)
+                    finalans = calculate(Integer.parseInt(numFriends.getText().toString()),
                         Double.parseDouble(tipAmt.getText().toString()),
                         Double.parseDouble(cost.getText().toString()));
+                else
+                    finalans = calculate(Integer.parseInt(numFriends.getText().toString()),tip,
+                            Double.parseDouble(cost.getText().toString()));
                 System.out.println("FINAL TIP:   " + finalans);
             }
         });
