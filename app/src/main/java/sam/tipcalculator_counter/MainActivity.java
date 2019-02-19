@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     double costnum;
     boolean usingCustom = false;
     boolean validInput = false;
+    boolean hasPressedSomething = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,32 +64,36 @@ public class MainActivity extends AppCompatActivity {
         ten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hasPressedSomething = true;
                 usingCustom = false;
-                calculate.setEnabled(false);
+                calculate.setEnabled(canCalcNonCustom());
                 tip = 10.0;
             }
         });
         twelve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hasPressedSomething = true;
                 usingCustom = false;
-                calculate.setEnabled(false);
+                calculate.setEnabled(canCalcNonCustom());
                 tip = 12.5;
             }
         });
         fifteen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hasPressedSomething = true;
                 usingCustom = false;
-                calculate.setEnabled(false);
+                calculate.setEnabled(canCalcNonCustom());
                 tip = 15.0;
             }
         });
         twenty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hasPressedSomething = true;
                 usingCustom = false;
-                calculate.setEnabled(false);
+                calculate.setEnabled(canCalcNonCustom());
                 tip = 20.0;
             }
         });
@@ -97,8 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                hasPressedSomething = true;
                 usingCustom = true;
-                calculate.setEnabled(true);
+                calculate.setEnabled(canCalcCustom());
                 try {
                     tip = Double.parseDouble(calculate.getText().toString());
                 }
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 double finalans;
+
                 if(usingCustom)
                     finalans = calculate(Integer.parseInt(numFriends.getText().toString()),
                         Double.parseDouble(tipAmt.getText().toString()),
@@ -127,6 +134,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private boolean canCalcNonCustom(){
+        return (numFriends.getText().toString().length() > 0) && (cost.getText().toString().length() > 0
+        && hasPressedSomething);
+    }
+    private boolean canCalcCustom(){
+        //return true if the friends, cost, and custom edit text aren't empty and if a button has been pressed
+        System.out.println((numFriends.getText().toString().length() > 0) + " " + (cost.getText().toString().length()>0) + " " +
+                (tipAmt.getText().toString().length() != 0) + " " + hasPressedSomething);
+
+        return (numFriends.getText().toString().length() > 0) && (cost.getText().toString().length()>0)
+                && tipAmt.getText().toString().length() >0 && hasPressedSomething;
+    }
 
     private View.OnKeyListener mKeyListener = new View.OnKeyListener() {
         @Override
@@ -135,9 +154,10 @@ public class MainActivity extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.editText2: //the asks the cost
 
+
                     if(numFriends.getText().toString().length() > 0 && !usingCustom) {
                         System.out.println("you're here!");
-                        calculate.setEnabled(true);
+                        calculate.setEnabled(canCalcNonCustom());
 
                     }
 
@@ -148,13 +168,28 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.editText3://this is the friends
 
+                    // if the cost field isn't empty and you're not using custom input
+                    //see if you cna enable the button
+                    if(cost.getText().toString().length() > 0 && !usingCustom) {
+                        System.out.println("you're here!");
+                        calculate.setEnabled(canCalcNonCustom());
+
+                    }
+                    //if the cost field isn't empty and you're using custom input
+                    //see if you can enable the button
+                    if(cost.getText().toString().length() >0 && usingCustom){
+                        System.out.println("it's workin baby");
+                        calculate.setEnabled(canCalcCustom());
+                    }
 
 
 
                 case R.id.editText: //this is the custom amount keying
-                    if(cost.getText().toString().length() >0 && usingCustom){
+                    //if the cust field isn't empty and you're using custom make sure the
+                    if(cost.getText().toString().length() >0 && usingCustom && numFriends.getText().toString().length() >0){
                         System.out.println("it's workin baby");
-                        calculate.setEnabled(true);
+                        System.out.println(canCalcCustom());
+                        calculate.setEnabled(canCalcCustom());
                     }
             }
             return false;
