@@ -1,5 +1,7 @@
 package sam.tipcalculator_counter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -30,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     TextView debug;
     int people;
     double tip;
-    double costnum;
     boolean usingCustom = false;
     boolean validInput = false;
     boolean hasPressedSomething = false;
@@ -117,21 +118,29 @@ public class MainActivity extends AppCompatActivity {
         calculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double finalans;
+                double finalAns =0.0;
+
+                if(doShowError()[0]){
+                    String errorOne = doShowError()[1]? "Field may not begin with \'.\'": "";
+                    //sorry for the nested ternary operator, just to figure out if it should be empty, have a leading comma
+                    //and space, or no leading comma or space, depending on what error is thrown
+                    String errorTwo = doShowError()[2]? doShowError()[1]? ", No leading zeroes allowed.": "No leading zeroes allowed.": "";
+                    showErrorAlert(errorOne + errorTwo,R.id.calculate);
+                    return;
+                }
 
                 if(usingCustom)
-                    finalans = calculate(Integer.parseInt(numFriends.getText().toString()),
+                    finalAns = calculate((int)Double.parseDouble(numFriends.getText().toString()),
                         Double.parseDouble(tipAmt.getText().toString()),
                         Double.parseDouble(cost.getText().toString()));
                 else
-                    finalans = calculate(Integer.parseInt(numFriends.getText().toString()),tip,
+                    finalAns = calculate((int)Double.parseDouble(numFriends.getText().toString()),tip,
                             Double.parseDouble(cost.getText().toString()));
-                System.out.println("FINAL TIP:   " + finalans);
+                System.out.println("FINAL TIP:   " + finalAns);
+                CharSequence ans = Double.toString(finalAns);
+                hello.setText(ans);
             }
         });
-
-
-
     }
 
     private boolean canCalcNonCustom(){
@@ -139,12 +148,23 @@ public class MainActivity extends AppCompatActivity {
         && hasPressedSomething);
     }
     private boolean canCalcCustom(){
-        //return true if the friends, cost, and custom edit text aren't empty and if a button has been pressed
-        System.out.println((numFriends.getText().toString().length() > 0) + " " + (cost.getText().toString().length()>0) + " " +
-                (tipAmt.getText().toString().length() != 0) + " " + hasPressedSomething);
-
+        //return true if the friends, cost, and custom edit text aren't empty and if a button has been pressed        
         return (numFriends.getText().toString().length() > 0) && (cost.getText().toString().length()>0)
                 && tipAmt.getText().toString().length() >0 && hasPressedSomething;
+
+    }
+
+    private boolean[] doShowError(){
+        //do you have good values?
+        boolean goodValues = (numFriends.getText().toString().charAt(0) != '.' && cost.getText().toString().charAt(0) != '.'
+                && custom.getText().toString().charAt(0) != '.');
+        //do you have a leading zero?
+        boolean noLeadingZero = (numFriends.getText().toString().charAt(0) != '0' && cost.getText().toString().charAt(0) != '0'
+                && custom.getText().toString().charAt(0) != '0');
+        System.out.println(goodValues + " " + noLeadingZero );
+        //if you don't have good values or you don't have if you have a leading zero then return true, sending an error message
+        //also the other two parts return something for the error message
+        return new boolean[]{(!goodValues || !noLeadingZero), !goodValues, !noLeadingZero};
     }
 
     private View.OnKeyListener mKeyListener = new View.OnKeyListener() {
@@ -178,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
                     //if the cost field isn't empty and you're using custom input
                     //see if you can enable the button
                     if(cost.getText().toString().length() >0 && usingCustom){
-                        System.out.println("it's workin baby");
                         calculate.setEnabled(canCalcCustom());
                     }
 
@@ -187,8 +206,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.editText: //this is the custom amount keying
                     //if the cust field isn't empty and you're using custom make sure the
                     if(cost.getText().toString().length() >0 && usingCustom && numFriends.getText().toString().length() >0){
-                        System.out.println("it's workin baby");
-                        System.out.println(canCalcCustom());
                         calculate.setEnabled(canCalcCustom());
                     }
             }
@@ -198,8 +215,22 @@ public class MainActivity extends AppCompatActivity {
 
     };
     private double calculate(int numPeeps, double tip, double cost){
+
         return ((cost * tip)/numPeeps)/100;
     }
 
+    private void showErrorAlert(String errorMessage, final int fieldId) {
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(errorMessage)
+                .setNeutralButton("Close",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                findViewById(fieldId).requestFocus();
+                            }
+                        }).show();
+    }
 
 }
