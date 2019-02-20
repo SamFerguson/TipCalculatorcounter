@@ -10,111 +10,111 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/tv2h"
-        android:layout_marginStart="@dimen/tv2s"
-        android:layout_marginTop="@dimen/tv2t"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/TV2MS"
+        android:layout_marginTop="@dimen/TV2T"
+        android:layout_marginEnd="@dimen/TV2E"
         android:text="@string/friendInput"
-        app:layout_constraintEnd_toStartOf="@+id/editText3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="@dimen/tv4w"
-        android:layout_height="@dimen/tv4h"
-        android:layout_marginStart="@dimen/tv4s"
-        android:layout_marginTop="@dimen/tv4t"
-        android:layout_marginEnd="@dimen/tv4e"
-        android:layout_marginBottom="@dimen/tv4b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/TV4S"
+        android:layout_marginTop="@dimen/TV4T"
+        android:layout_marginBottom="@dimen/TV4B"
         android:text="@string/cost"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.723"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.213" />
+        app:layout_constraintVertical_bias="0.114" />
 
     <EditText
         android:id="@+id/editText3"
-        android:layout_width="@dimen/et3w"
-        android:layout_height="@dimen/et3h"
-        android:layout_marginStart="@dimen/et3s"
-        android:layout_marginTop="@dimen/et3t"
-        android:layout_marginEnd="@dimen/et3e"
-        android:layout_marginBottom="@dimen/et3b"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/ET3H"
+        android:layout_marginStart="@dimen/ET3S"
+        android:layout_marginTop="@dimen/ET3T"
+        android:layout_marginEnd="@dimen/ET3E"
+        android:layout_marginBottom="@dimen/ET3B"
+        android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        android:inputType="numberDecimal"/>
+        android:importantForAutofill="no" tools:targetApi="o"/>
 
     <Button
         android:id="@+id/button8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/b8s"
-        android:layout_marginEnd="@dimen/b8e"
-        android:layout_marginBottom="@dimen/b8b"
+        android:layout_marginStart="@dimen/B8MS"
+        android:layout_marginEnd="@dimen/B8ME"
+        android:layout_marginBottom="@dimen/B8MB"
         android:text="@string/reset"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/tv5s"
-        android:layout_marginTop="@dimen/tv5t"
-        android:layout_marginEnd="@dimen/tv5e"
-        android:layout_marginBottom="@dimen/tv5b"
+        android:layout_marginStart="@dimen/TV5MS"
+        android:layout_marginTop="@dimen/TV5MT"
+        android:layout_marginEnd="@dimen/TV5ME"
         android:text="@string/output"
-        app:layout_constraintBottom_toTopOf="@+id/button8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.661"
+        app:layout_constraintHorizontal_bias="0.572"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editText2"
-        android:layout_width="@dimen/et2w"
-        android:layout_height="@dimen/et2h"
-        android:layout_marginStart="@dimen/et2s"
-        android:layout_marginTop="@dimen/et2t"
-        android:layout_marginEnd="@dimen/et2e"
-        android:layout_marginBottom="@dimen/et2b"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/ET2H"
+        android:layout_marginStart="@dimen/ET2MS"
+        android:layout_marginTop="@dimen/ET2MT"
+        android:layout_marginEnd="@dimen/ET2ME"
+        android:layout_marginBottom="@dimen/ET2MB"
         android:inputType="numberDecimal"
-        android:labelFor="@id/editText2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.446"
+        app:layout_constraintHorizontal_bias="0.72"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.166"
+         />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/eth"
-        android:layout_marginStart="@dimen/ets"
-        android:layout_marginTop="@dimen/ett"
-        android:layout_marginEnd="@dimen/etm"
+        android:layout_height="@dimen/ETH"
+        android:layout_marginStart="@dimen/ETMS"
+        android:layout_marginTop="@dimen/ETMT"
+        android:layout_marginEnd="@dimen/ETME"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.971"
+        app:layout_constraintHorizontal_bias="0.72"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+         />
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/rgs"
-        android:layout_marginTop="@dimen/rgt"
-
+        android:layout_marginStart="@dimen/RGMS"
+        android:layout_marginTop="@dimen/RGMT"
+        android:layout_marginEnd="@dimen/RGME"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toStartOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText3">
 
@@ -158,11 +158,12 @@
         android:id="@+id/calculate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/cs"
-        android:layout_marginEnd="@dimen/ce"
-        android:layout_marginBottom="@dimen/cb"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="140dp"
         android:text="@string/calculate"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

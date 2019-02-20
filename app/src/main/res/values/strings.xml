@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TipCalculator-counter</string>
 
@@ -8,13 +9,17 @@
     <string name="a20">20</string>
     <string name="custom">Custom tip amt:</string>
     <string name="reset">Reset</string>
-    <string name="cButton">Custom</string>
+    <string name="cButton">Custom:</string>
     <string name="friendInput">How many friends do you have?</string>
     <string name="money">$ per person</string>
-    <string name="percet">%</string>
+    <string name="percent">%</string>
     <string name="output">Please enter something</string>
     <string name="total">Cost of food?</string>
-
+    <string name="error">Error</string>
+    <string name="close">Close</string>
+    <string name="errorCode1">Fields may not begin with \'.\'</string>
+    <string name="errorCode2a">, No leading zeroes allowed.</string>
+    <string name="errorCode2b">No leading zeroes allowed.</string>
     <string name="calculate">calculate</string>
     <string name="cost">Total Cost:</string>
 

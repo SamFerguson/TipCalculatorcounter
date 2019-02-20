@@ -1,0 +1,97 @@
+<resources>
+
+    <dimen name="TV2MS">8dp</dimen>
+    <dimen name="TV2T">24dp</dimen>
+    <dimen name="TV2E">8dp</dimen>
+
+    <dimen name="TV4S">324dp</dimen>
+    <dimen name="TV4T">8dp</dimen>
+    <dimen name="TV4B">144dp</dimen>
+
+    <dimen name="ET3H">42dp</dimen>
+    <dimen name="ET3S">4dp</dimen>
+    <dimen name="ET3T">16dp</dimen>
+    <dimen name="ET3E">116dp</dimen>
+    <dimen name="ET3B">8dp</dimen>
+
+    <dimen name="B8MS">148dp</dimen>
+    <dimen name="B8ME">148dp</dimen>
+    <dimen name="B8MB">28dp</dimen>
+
+    <dimen name="TV5MS">8dp</dimen>
+    <dimen name="TV5MT">204dp</dimen>
+    <dimen name="TV5ME">94dp</dimen>
+
+    <dimen name="ET2H">39dp</dimen>
+    <dimen name="ET2MS">8dp</dimen>
+    <dimen name="ET2MT">8dp</dimen>
+    <dimen name="ET2ME">8dp</dimen>
+    <dimen name="ET2MB">216dp</dimen>
+
+    <dimen name="ETH">0dp</dimen>
+    <dimen name="ETMS">8dp</dimen>
+    <dimen name="ETMT">76dp</dimen>
+    <dimen name="ETME">1dp</dimen>
+
+    <dimen name="RGMS">5dp</dimen>
+    <dimen name="RGMT">25dp</dimen>
+    <dimen name="RGME">100dp</dimen>
+
+    <dimen name="CMS">8dp</dimen>
+    <dimen name="CMB">140dp</dimen>
+
+
+    <!--Here's where the portrait dps go-->
+
+
+
+    <dimen name="tv2h">0dp</dimen>
+    <dimen name="tv2s">16dp</dimen>
+    <dimen name="tv2t">24dp</dimen>
+
+    <dimen name="tv4w">85dp</dimen>
+    <dimen name="tv4h">17dp</dimen>
+    <dimen name="tv4s">8dp</dimen>
+    <dimen name="tv4t">8dp</dimen>
+    <dimen name="tv4e">244dp</dimen>
+    <dimen name="tv4b">144dp</dimen>
+
+    <dimen name="et3w">46dp</dimen>
+    <dimen name="et3h">42dp</dimen>
+    <dimen name="et3s">4dp</dimen>
+    <dimen name="et3t">16dp</dimen>
+    <dimen name="et3e">116dp</dimen>
+    <dimen name="et3b">8dp</dimen>
+
+    <dimen name="b8s">148dp</dimen>
+    <dimen name="b8e">148dp</dimen>
+    <dimen name="b8b">50dp</dimen>
+
+    <dimen name="tv5s">8dp</dimen>
+    <dimen name="tv5t">8dp</dimen>
+    <dimen name="tv5e">94dp</dimen>
+    <dimen name="tv5b">46dp</dimen>
+
+    <dimen name="et2w">77dp</dimen>
+    <dimen name="et2h">39dp</dimen>
+    <dimen name="et2s">8dp</dimen>
+    <dimen name="et2t">90dp</dimen>
+    <dimen name="et2e">14dp</dimen>
+    <dimen name="et2b">8dp</dimen>
+
+    <dimen name="eth">44dp</dimen>
+    <dimen name="ets">8dp</dimen>
+    <dimen name="ett">196dp</dimen>
+    <dimen name="etm">8dp</dimen>
+
+    <dimen name="rgs">32dp</dimen>
+    <dimen name="rgt">150dp</dimen>
+
+    <dimen name="cs">8dp</dimen>
+    <dimen name="ce">8dp</dimen>
+    <dimen name="cb">192dp</dimen>
+
+
+
+
+</resources>

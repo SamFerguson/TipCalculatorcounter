@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,50 +18,59 @@ import java.security.Key;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button ten;
-    Button twelve;
-    Button fifteen;
-    Button twenty;
-    Button custom;
+    RadioButton ten;
+    RadioButton twelve;
+    RadioButton fifteen;
+    RadioButton twenty;
+    RadioButton custom;
     Button reset;
     Button calculate;
-    boolean hasTyped = false;
-    TextView hello;
+    TextView output;
     EditText cost;
     EditText tipAmt;
     EditText numFriends;
-    TextView debug;
-    int people;
     double tip;
     boolean usingCustom = false;
-    boolean validInput = false;
     boolean hasPressedSomething = false;
+    CharSequence oldText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null){
+            oldText = savedInstanceState.getCharSequence("key");
+            usingCustom = savedInstanceState.getBoolean("custom");
+            hasPressedSomething = savedInstanceState.getBoolean("pressed");
+        }
+
         setContentView(R.layout.activity_main);
-
         //make all of the view stuff that matters
-
         reset = (Button) findViewById(R.id.button8);
-        hello = (TextView) findViewById(R.id.textView5);
+        output = (TextView) findViewById(R.id.textView5);
         cost = (EditText) findViewById(R.id.editText2);
         tipAmt = (EditText) findViewById(R.id.editText);
         numFriends = (EditText) findViewById(R.id.editText3);
         calculate = (Button) findViewById(R.id.calculate);
-        debug = (TextView) findViewById(R.id.textView7);
-        ten = (Button) findViewById(R.id.radioButton5);
-        twelve = (Button) findViewById(R.id.radioButton4);
-        fifteen = (Button) findViewById(R.id.radioButton);
-        twenty = (Button) findViewById(R.id.radioButton7);
-        custom = (Button) findViewById(R.id.radioButton8);
+        ten = (RadioButton) findViewById(R.id.radioButton5);
+        twelve = (RadioButton) findViewById(R.id.radioButton4);
+        fifteen = (RadioButton) findViewById(R.id.radioButton);
+        twenty = (RadioButton) findViewById(R.id.radioButton7);
+        custom = (RadioButton) findViewById(R.id.radioButton8);
 
+        if(savedInstanceState != null){
+            output.setText(oldText);
+            if(usingCustom){
+                canCalcCustom();
+            }
+            else{
+                canCalcNonCustom();
+            }
+        }
         numFriends.setOnKeyListener(mKeyListener);
         tipAmt.setOnKeyListener(mKeyListener);
         cost.setOnKeyListener(mKeyListener);
 
-        calculate.setEnabled(false);
+
 
         ten.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     tip = Double.parseDouble(calculate.getText().toString());
                 }
-                catch(NumberFormatException n){
-                    System.out.print("nothing");
+                catch(NumberFormatException ok){
                 }
 
             }
@@ -119,14 +128,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 double finalAns =0.0;
-
-                if(doShowError()[0]){
-                    String errorOne = doShowError()[1]? "Field may not begin with \'.\'": "";
-                    //sorry for the nested ternary operator, just to figure out if it should be empty, have a leading comma
-                    //and space, or no leading comma or space, depending on what error is thrown
-                    String errorTwo = doShowError()[2]? doShowError()[1]? ", No leading zeroes allowed.": "No leading zeroes allowed.": "";
-                    showErrorAlert(errorOne + errorTwo,R.id.calculate);
-                    return;
+                try {
+                    if (doShowError()[0]) {
+                        String errorOne = doShowError()[1] ? getString(R.string.errorCode1) : "";
+                        //sorry for the nested ternary operator, just to figure out if it should be empty, have a leading comma
+                        //and space, or no leading comma or space, depending on what error is thrown
+                        String errorTwo = doShowError()[2] ? doShowError()[1] ? getString(R.string.errorCode2a) : getString(R.string.errorCode2b) : "";
+                        showErrorAlert(errorOne + errorTwo, R.id.calculate);
+                        return;
+                    }
+                }
+                catch(StringIndexOutOfBoundsException e){
+                    showErrorAlert(getString(R.string.error), R.id.calculate);
                 }
 
                 if(usingCustom)
@@ -136,9 +149,23 @@ public class MainActivity extends AppCompatActivity {
                 else
                     finalAns = calculate((int)Double.parseDouble(numFriends.getText().toString()),tip,
                             Double.parseDouble(cost.getText().toString()));
-                System.out.println("FINAL TIP:   " + finalAns);
                 CharSequence ans = Double.toString(finalAns);
-                hello.setText(ans);
+                output.setText(String.format("$%s", ans));
+            }
+        });
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cost.getText().clear();
+                numFriends.getText().clear();
+                tipAmt.getText().clear();
+                ten.setChecked(false);
+                twelve.setChecked(false);
+                fifteen.setChecked(false);
+                twenty.setChecked(false);
+                hasPressedSomething = false;
+                output.setText(R.string.output);
+                calculate.setEnabled(false);
             }
         });
     }
@@ -161,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         //do you have a leading zero?
         boolean noLeadingZero = (numFriends.getText().toString().charAt(0) != '0' && cost.getText().toString().charAt(0) != '0'
                 && custom.getText().toString().charAt(0) != '0');
-        System.out.println(goodValues + " " + noLeadingZero );
         //if you don't have good values or you don't have if you have a leading zero then return true, sending an error message
         //also the other two parts return something for the error message
         return new boolean[]{(!goodValues || !noLeadingZero), !goodValues, !noLeadingZero};
@@ -173,57 +199,44 @@ public class MainActivity extends AppCompatActivity {
 
             switch (v.getId()) {
                 case R.id.editText2: //the asks the cost
-
-
                     if(numFriends.getText().toString().length() > 0 && !usingCustom) {
-                        System.out.println("you're here!");
                         calculate.setEnabled(canCalcNonCustom());
-
                     }
-
-
-                    /*    costnum = Double.parseDouble(cost.getText().toString());
-                        System.out.println(costnum);
-                    */
-
+                    if(usingCustom && numFriends.getText().toString().length()>0
+                            && tipAmt.getText().toString().length()>0){
+                        calculate.setEnabled(canCalcCustom());
+                    }
                 case R.id.editText3://this is the friends
-
                     // if the cost field isn't empty and you're not using custom input
                     //see if you cna enable the button
                     if(cost.getText().toString().length() > 0 && !usingCustom) {
-                        System.out.println("you're here!");
                         calculate.setEnabled(canCalcNonCustom());
-
                     }
                     //if the cost field isn't empty and you're using custom input
                     //see if you can enable the button
                     if(cost.getText().toString().length() >0 && usingCustom){
                         calculate.setEnabled(canCalcCustom());
                     }
-
-
-
                 case R.id.editText: //this is the custom amount keying
-                    //if the cust field isn't empty and you're using custom make sure the
+                    //make sure everything has input
+                    System.out.println((cost.getText().toString().length() >0) +" "+ usingCustom + "" + (numFriends.getText().toString().length() >0));
+                    calculate.setEnabled(canCalcCustom());
                     if(cost.getText().toString().length() >0 && usingCustom && numFriends.getText().toString().length() >0){
                         calculate.setEnabled(canCalcCustom());
                     }
             }
             return false;
-
         }
-
     };
     private double calculate(int numPeeps, double tip, double cost){
-
         return ((cost * tip)/numPeeps)/100;
     }
 
     private void showErrorAlert(String errorMessage, final int fieldId) {
         new AlertDialog.Builder(this)
-                .setTitle("Error")
+                .setTitle(getString(R.string.error))
                 .setMessage(errorMessage)
-                .setNeutralButton("Close",
+                .setNeutralButton(getString(R.string.close),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog,
@@ -231,6 +244,16 @@ public class MainActivity extends AppCompatActivity {
                                 findViewById(fieldId).requestFocus();
                             }
                         }).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //put the old text in bundle
+        outState.putCharSequence("key", output.getText());
+        //put whether they're using the custom in the bundle
+        outState.putBoolean("custom", usingCustom);
+        outState.putBoolean("pressed", hasPressedSomething);
     }
 
 }
