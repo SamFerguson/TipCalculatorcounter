@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id = "@+id/activitymain"
     tools:context=".MainActivity">
 
     <TextView
@@ -66,7 +67,6 @@
         android:layout_marginTop="@dimen/tv5t"
         android:layout_marginEnd="@dimen/tv5e"
         android:layout_marginBottom="@dimen/tv5b"
-        android:text="@string/output"
         app:layout_constraintBottom_toTopOf="@+id/button8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.661"

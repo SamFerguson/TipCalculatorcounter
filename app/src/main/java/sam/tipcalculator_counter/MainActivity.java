@@ -2,8 +2,11 @@ package sam.tipcalculator_counter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.annotation.Dimension;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import java.security.Key;
+import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     boolean hasPressedSomething = false;
     CharSequence oldText = "";
     int focus;
+    int imageId;
+    ConstraintLayout main;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         fifteen = (RadioButton) findViewById(R.id.radioButton);
         twenty = (RadioButton) findViewById(R.id.radioButton7);
         custom = (RadioButton) findViewById(R.id.radioButton8);
-
+        main = findViewById(R.id.activitymain);
         if(savedInstanceState != null){
             output.setText(oldText);
             if(usingCustom){
@@ -142,22 +148,41 @@ public class MainActivity extends AppCompatActivity {
                     if (doShowError()[0]) {
                         String errorOne = doShowError()[1] ? getString(R.string.errorCode1) : "";
                         String errorTwo = doShowError()[2] ? doShowError()[1] ? getString(R.string.errorCode2a) : getString(R.string.errorCode2b) : "";
-                        showErrorAlert(errorOne + errorTwo, R.id.calculate);
+                        showErrorAlert(errorOne + errorTwo, 1);
                         return;
                     }
                 }
                 catch(StringIndexOutOfBoundsException e){
                     showErrorAlert(getString(R.string.error), R.id.calculate);
                 }
-                if(usingCustom)
-                    finalAns = calculate((int)Double.parseDouble(numFriends.getText().toString()),
-                        Double.parseDouble(tipAmt.getText().toString()),
-                        Double.parseDouble(cost.getText().toString()));
+                if(usingCustom) {
+                    finalAns = calculate((int) Double.parseDouble(numFriends.getText().toString()),
+                            Double.parseDouble(tipAmt.getText().toString()),
+                            Double.parseDouble(cost.getText().toString()));
+                    tip = Double.parseDouble(tipAmt.getText().toString());
+                }
                 else
                     finalAns = calculate((int)Double.parseDouble(numFriends.getText().toString()),tip,
                             Double.parseDouble(cost.getText().toString()));
-                CharSequence ans = (Double.toString(Math.round(finalAns *100.0)/100.0));
-                output.setText(String.format("$%s", ans));
+                NumberFormat format = NumberFormat.getCurrencyInstance();
+                CharSequence ans = format.format(Math.round(finalAns *100.0)/100.0);
+                output.setText(String.format("Total TIP: %s", ans));
+                if(tip <100.00 && tip >=20.00){
+                    imageId = R.drawable.giveitupwaiter;
+                }
+
+                else if(tip <20.00 && tip > 10.00){
+                    imageId = R.drawable.contentserver;
+                }
+                else if(tip <=10.0){
+                    imageId = R.drawable.madserver;
+                }
+                else {
+                    imageId = R.drawable.clappingwaiter;
+                }
+                output.setTextColor(getColor(R.color.colorAccent));
+                output.setTextSize(45);
+                main.setBackground(getDrawable(imageId));
             }
         });
         /*
@@ -174,8 +199,9 @@ public class MainActivity extends AppCompatActivity {
                 fifteen.setChecked(false);
                 twenty.setChecked(false);
                 hasPressedSomething = false;
-                output.setText(R.string.output);
+                output.setText("");
                 calculate.setEnabled(false);
+
             }
         });
     }

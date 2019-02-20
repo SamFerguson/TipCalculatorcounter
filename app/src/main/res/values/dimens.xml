@@ -68,8 +68,8 @@
     <dimen name="b8b">50dp</dimen>
 
     <dimen name="tv5s">8dp</dimen>
-    <dimen name="tv5t">8dp</dimen>
-    <dimen name="tv5e">94dp</dimen>
+    <dimen name="tv5t">16dp</dimen>
+    <dimen name="tv5e">55dp</dimen>
     <dimen name="tv5b">46dp</dimen>
 
     <dimen name="et2w">77dp</dimen>
