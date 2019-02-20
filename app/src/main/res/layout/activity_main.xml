@@ -41,13 +41,10 @@
         android:layout_marginStart="@dimen/et3s"
         android:layout_marginTop="@dimen/et3t"
         android:layout_marginEnd="@dimen/et3e"
-        android:layout_marginBottom="@dimen/et3b"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:inputType="numberDecimal"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button8"

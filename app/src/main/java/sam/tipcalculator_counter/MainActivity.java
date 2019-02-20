@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     boolean usingCustom = false;
     boolean hasPressedSomething = false;
     CharSequence oldText = "";
+    int focus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,10 @@ public class MainActivity extends AppCompatActivity {
         tipAmt.setOnKeyListener(mKeyListener);
         cost.setOnKeyListener(mKeyListener);
 
-
+        /*
+        All of these click listeners tell app a button has been pressed,
+        whether they're using custom, what the tip is, whether to calculate
+         */
 
         ten.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,13 +106,16 @@ public class MainActivity extends AppCompatActivity {
         twenty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println(calculate.isEnabled());
                 hasPressedSomething = true;
                 usingCustom = false;
                 calculate.setEnabled(canCalcNonCustom());
                 tip = 20.0;
             }
         });
-
+        /*
+        Same as other radio buttons but handles differently becuse it's custom
+         */
         custom.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -124,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        /*
+        when they calculate check for errors and then calculate based on custom and non-custom
+         */
         calculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (doShowError()[0]) {
                         String errorOne = doShowError()[1] ? getString(R.string.errorCode1) : "";
-                        //sorry for the nested ternary operator, just to figure out if it should be empty, have a leading comma
-                        //and space, or no leading comma or space, depending on what error is thrown
                         String errorTwo = doShowError()[2] ? doShowError()[1] ? getString(R.string.errorCode2a) : getString(R.string.errorCode2b) : "";
                         showErrorAlert(errorOne + errorTwo, R.id.calculate);
                         return;
@@ -141,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 catch(StringIndexOutOfBoundsException e){
                     showErrorAlert(getString(R.string.error), R.id.calculate);
                 }
-
                 if(usingCustom)
                     finalAns = calculate((int)Double.parseDouble(numFriends.getText().toString()),
                         Double.parseDouble(tipAmt.getText().toString()),
@@ -149,10 +156,13 @@ public class MainActivity extends AppCompatActivity {
                 else
                     finalAns = calculate((int)Double.parseDouble(numFriends.getText().toString()),tip,
                             Double.parseDouble(cost.getText().toString()));
-                CharSequence ans = Double.toString(finalAns);
+                CharSequence ans = (Double.toString(Math.round(finalAns *100.0)/100.0));
                 output.setText(String.format("$%s", ans));
             }
         });
+        /*
+        reset button resets everything to basically oncreate
+         */
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,69 +179,89 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    /*
+    method to see if user can calculate tip with distinct button pressed
+     */
     private boolean canCalcNonCustom(){
         return (numFriends.getText().toString().length() > 0) && (cost.getText().toString().length() > 0
         && hasPressedSomething);
     }
+    /*
+    method to see if user can calculate tip with custom button pressed
+     */
     private boolean canCalcCustom(){
         //return true if the friends, cost, and custom edit text aren't empty and if a button has been pressed        
         return (numFriends.getText().toString().length() > 0) && (cost.getText().toString().length()>0)
                 && tipAmt.getText().toString().length() >0 && hasPressedSomething;
 
     }
-
+    /*
+    method to see whether to show an error, and what error messages to throw if there is
+    and it finds what EditText throws the error and stores the int and passes that ShowError
+     */
     private boolean[] doShowError(){
-        //do you have good values?
         boolean goodValues = (numFriends.getText().toString().charAt(0) != '.' && cost.getText().toString().charAt(0) != '.'
                 && custom.getText().toString().charAt(0) != '.');
-        //do you have a leading zero?
         boolean noLeadingZero = (numFriends.getText().toString().charAt(0) != '0' && cost.getText().toString().charAt(0) != '0'
                 && custom.getText().toString().charAt(0) != '0');
-        //if you don't have good values or you don't have if you have a leading zero then return true, sending an error message
-        //also the other two parts return something for the error message
+        if(!goodValues||!noLeadingZero){
+            if(numFriends.getText().toString().charAt(0) != '.' || numFriends.getText().toString().charAt(0) != '0')
+                focus = numFriends.getId();
+            else if(cost.getText().toString().charAt(0) != '.' || cost.getText().toString().charAt(0) != '0')
+                focus = cost.getId();
+            else
+                focus = custom.getId();
+        }
         return new boolean[]{(!goodValues || !noLeadingZero), !goodValues, !noLeadingZero};
     }
-
+    /*
+    Handle whether the user can calculate everytime they do a keystroke
+     */
     private View.OnKeyListener mKeyListener = new View.OnKeyListener() {
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) throws NumberFormatException {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
 
             switch (v.getId()) {
                 case R.id.editText2: //the asks the cost
                     if(numFriends.getText().toString().length() > 0 && !usingCustom) {
                         calculate.setEnabled(canCalcNonCustom());
+                        System.out.println("Is it enabled?(not custom): " + calculate.isEnabled()+ " "+hasPressedSomething);
                     }
                     if(usingCustom && numFriends.getText().toString().length()>0
                             && tipAmt.getText().toString().length()>0){
                         calculate.setEnabled(canCalcCustom());
+                        System.out.println("Is it enabled?(custom): " + calculate.isEnabled()+ " " + hasPressedSomething);
                     }
+                    break;
                 case R.id.editText3://this is the friends
-                    // if the cost field isn't empty and you're not using custom input
-                    //see if you cna enable the button
                     if(cost.getText().toString().length() > 0 && !usingCustom) {
+                        System.out.println(canCalcNonCustom());
                         calculate.setEnabled(canCalcNonCustom());
                     }
-                    //if the cost field isn't empty and you're using custom input
-                    //see if you can enable the button
                     if(cost.getText().toString().length() >0 && usingCustom){
                         calculate.setEnabled(canCalcCustom());
                     }
+                    break;
                 case R.id.editText: //this is the custom amount keying
-                    //make sure everything has input
-                    System.out.println((cost.getText().toString().length() >0) +" "+ usingCustom + "" + (numFriends.getText().toString().length() >0));
                     calculate.setEnabled(canCalcCustom());
                     if(cost.getText().toString().length() >0 && usingCustom && numFriends.getText().toString().length() >0){
                         calculate.setEnabled(canCalcCustom());
                     }
+                    break;
             }
+            System.out.println("outside switch?: " + calculate.isEnabled());
             return false;
         }
     };
+    /*
+     calculate the tip
+     */
     private double calculate(int numPeeps, double tip, double cost){
         return ((cost * tip)/numPeeps)/100;
     }
-
+    /*
+    show the error
+     */
     private void showErrorAlert(String errorMessage, final int fieldId) {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.error))
@@ -241,11 +271,13 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int which) {
-                                findViewById(fieldId).requestFocus();
+                                findViewById(focus).requestFocus();
                             }
                         }).show();
     }
-
+    /*
+    bundle the things you need
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
