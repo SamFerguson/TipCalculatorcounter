@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             usingCustom = savedInstanceState.getBoolean("custom");
             hasPressedSomething = savedInstanceState.getBoolean("pressed");
             imageId = savedInstanceState.getInt("image");
+            tip = savedInstanceState.getDouble("tip");
         }
 
         setContentView(R.layout.activity_main);
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         twenty = (RadioButton) findViewById(R.id.radioButton7);
         custom = (RadioButton) findViewById(R.id.radioButton8);
         main = findViewById(R.id.activitymain);
-        ConstraintLayout side = findViewById(R.id.landactivity);
+        final ConstraintLayout side = findViewById(R.id.landactivity);
 
         if(savedInstanceState != null){
             output.setText(oldText);
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 if (possibleAns.charAt(possibleAns.length()-1) == '0')
                     possibleAns += "0";
                 CharSequence ans = possibleAns;
-                output.setText(String.format("Total TIP: %s", ans));
+                output.setText(String.format("Total TIP: $%s", ans));
                 if(tip <100.00 && tip >=20.00){
                     imageId = R.drawable.giveitupwaiter;
                 }
@@ -199,10 +200,16 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     imageId = R.drawable.clappingwaiter;
                 }
-                output.setTextColor(getColor(R.color.colorAccent));
-                output.setTextSize(45);
-                System.out.println(imageId);
-                main.setBackground(getDrawable(imageId));
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    side.setBackground(getDrawable(imageId));
+                    output.setTextColor(getColor(R.color.colorAccent));
+                    output.setTextSize(30);
+                }
+                else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    main.setBackground(getDrawable(imageId));
+                    output.setTextColor(getColor(R.color.colorAccent));
+                    output.setTextSize(45);
+                }
             }
         });
         /*
@@ -271,12 +278,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.editText2: //the asks the cost
                     if(numFriends.getText().toString().length() > 0 && !usingCustom) {
                         calculate.setEnabled(canCalcNonCustom());
-                        System.out.println("Is it enabled?(not custom): " + calculate.isEnabled()+ " "+hasPressedSomething);
                     }
                     if(usingCustom && numFriends.getText().toString().length()>0
                             && tipAmt.getText().toString().length()>0){
                         calculate.setEnabled(canCalcCustom());
-                        System.out.println("Is it enabled?(custom): " + calculate.isEnabled()+ " " + hasPressedSomething);
                     }
                     break;
                 case R.id.editText3://this is the friends
@@ -295,7 +300,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
             }
-            System.out.println("outside switch?: " + calculate.isEnabled());
             return false;
         }
     };
@@ -303,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
      calculate the tip
      */
     private double calculate(int numPeeps, double tip, double cost){
+        System.out.println(numPeeps + " tip: " + tip + "  cost: " + cost);
         return ((cost * tip)/numPeeps)/100;
     }
     /*
@@ -333,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putBoolean("custom", usingCustom);
         outState.putBoolean("pressed", hasPressedSomething);
         outState.putInt("image", imageId);
+        outState.putDouble("tip",tip);
     }
 
 }
