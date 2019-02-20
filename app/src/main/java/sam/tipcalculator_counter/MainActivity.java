@@ -2,6 +2,7 @@ package sam.tipcalculator_counter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.support.annotation.Dimension;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             oldText = savedInstanceState.getCharSequence("key");
             usingCustom = savedInstanceState.getBoolean("custom");
             hasPressedSomething = savedInstanceState.getBoolean("pressed");
+            imageId = savedInstanceState.getInt("image");
         }
 
         setContentView(R.layout.activity_main);
@@ -64,8 +66,22 @@ public class MainActivity extends AppCompatActivity {
         twenty = (RadioButton) findViewById(R.id.radioButton7);
         custom = (RadioButton) findViewById(R.id.radioButton8);
         main = findViewById(R.id.activitymain);
+        ConstraintLayout side = findViewById(R.id.landactivity);
+
         if(savedInstanceState != null){
             output.setText(oldText);
+            System.out.println(imageId);
+            System.out.println(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                side.setBackground(getDrawable(imageId));
+                output.setTextColor(getColor(R.color.colorAccent));
+                output.setTextSize(30);
+            }
+            else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                main.setBackground(getDrawable(imageId));
+                output.setTextColor(getColor(R.color.colorAccent));
+                output.setTextSize(45);
+            }
             if(usingCustom){
                 canCalcCustom();
             }
@@ -165,7 +181,10 @@ public class MainActivity extends AppCompatActivity {
                     finalAns = calculate((int)Double.parseDouble(numFriends.getText().toString()),tip,
                             Double.parseDouble(cost.getText().toString()));
                 NumberFormat format = NumberFormat.getCurrencyInstance();
-                CharSequence ans = format.format(Math.round(finalAns *100.0)/100.0);
+                String possibleAns = Double.toString(Math.round(finalAns *100.0)/100.0);
+                if (possibleAns.charAt(possibleAns.length()-1) == '0')
+                    possibleAns += "0";
+                CharSequence ans = possibleAns;
                 output.setText(String.format("Total TIP: %s", ans));
                 if(tip <100.00 && tip >=20.00){
                     imageId = R.drawable.giveitupwaiter;
@@ -182,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 output.setTextColor(getColor(R.color.colorAccent));
                 output.setTextSize(45);
+                System.out.println(imageId);
                 main.setBackground(getDrawable(imageId));
             }
         });
@@ -312,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
         //put whether they're using the custom in the bundle
         outState.putBoolean("custom", usingCustom);
         outState.putBoolean("pressed", hasPressedSomething);
+        outState.putInt("image", imageId);
     }
 
 }
