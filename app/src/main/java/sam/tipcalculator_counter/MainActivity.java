@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             imageId = savedInstanceState.getInt("image");
             tip = savedInstanceState.getDouble("tip");
         }
+        System.out.println("Unsaving instance state" + hasPressedSomething);
 
         setContentView(R.layout.activity_main);
         //make all of the view stuff that matters
@@ -68,11 +69,10 @@ public class MainActivity extends AppCompatActivity {
         custom = (RadioButton) findViewById(R.id.radioButton8);
         main = findViewById(R.id.activitymain);
         final ConstraintLayout side = findViewById(R.id.landactivity);
+        calculate.setEnabled(false);
 
         if(savedInstanceState != null){
             output.setText(oldText);
-            System.out.println(imageId);
-            System.out.println(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 side.setBackground(getDrawable(imageId));
                 output.setTextColor(getColor(R.color.colorAccent));
@@ -83,12 +83,8 @@ public class MainActivity extends AppCompatActivity {
                 output.setTextColor(getColor(R.color.colorAccent));
                 output.setTextSize(45);
             }
-            if(usingCustom){
-                canCalcCustom();
-            }
-            else{
-                canCalcNonCustom();
-            }
+            calculate.setEnabled(savedInstanceState.getBoolean("was enabled"));
+
         }
         numFriends.setOnKeyListener(mKeyListener);
         tipAmt.setOnKeyListener(mKeyListener);
@@ -129,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         twenty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(calculate.isEnabled());
                 hasPressedSomething = true;
                 usingCustom = false;
                 calculate.setEnabled(canCalcNonCustom());
@@ -228,7 +223,12 @@ public class MainActivity extends AppCompatActivity {
                 hasPressedSomething = false;
                 output.setText("");
                 calculate.setEnabled(false);
-
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    side.setBackgroundResource(0);
+                }
+                else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    main.setBackgroundResource(0);
+                }
             }
         });
     }
@@ -236,6 +236,8 @@ public class MainActivity extends AppCompatActivity {
     method to see if user can calculate tip with distinct button pressed
      */
     private boolean canCalcNonCustom(){
+        System.out.println("text in friends "+(numFriends.getText().toString().length() > 0) + " cost: " + (cost.getText().toString().length() > 0)
+                +" pressed: "+ hasPressedSomething);
         return (numFriends.getText().toString().length() > 0) && (cost.getText().toString().length() > 0
         && hasPressedSomething);
     }
@@ -286,7 +288,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.editText3://this is the friends
                     if(cost.getText().toString().length() > 0 && !usingCustom) {
-                        System.out.println(canCalcNonCustom());
                         calculate.setEnabled(canCalcNonCustom());
                     }
                     if(cost.getText().toString().length() >0 && usingCustom){
@@ -307,7 +308,6 @@ public class MainActivity extends AppCompatActivity {
      calculate the tip
      */
     private double calculate(int numPeeps, double tip, double cost){
-        System.out.println(numPeeps + " tip: " + tip + "  cost: " + cost);
         return ((cost * tip)/numPeeps)/100;
     }
     /*
@@ -335,10 +335,12 @@ public class MainActivity extends AppCompatActivity {
         //put the old text in bundle
         outState.putCharSequence("key", output.getText());
         //put whether they're using the custom in the bundle
+        System.out.println("bundling: " + hasPressedSomething);
         outState.putBoolean("custom", usingCustom);
         outState.putBoolean("pressed", hasPressedSomething);
         outState.putInt("image", imageId);
         outState.putDouble("tip",tip);
+        outState.putBoolean("was enabled", calculate.isEnabled());
     }
 
 }
