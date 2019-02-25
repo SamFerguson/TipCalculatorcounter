@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //restart all the stuff
         if(savedInstanceState != null){
             oldText = savedInstanceState.getCharSequence("key");
             usingCustom = savedInstanceState.getBoolean("custom");
@@ -52,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
             imageId = savedInstanceState.getInt("image");
             tip = savedInstanceState.getDouble("tip");
         }
-        System.out.println("Unsaving instance state" + hasPressedSomething);
-
         setContentView(R.layout.activity_main);
         //make all of the view stuff that matters
         reset = (Button) findViewById(R.id.button8);
@@ -71,15 +70,24 @@ public class MainActivity extends AppCompatActivity {
         final ConstraintLayout side = findViewById(R.id.landactivity);
         calculate.setEnabled(false);
 
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            side.setBackgroundResource(0);
+        }
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            main.setBackgroundResource(0);
+        }
+
         if(savedInstanceState != null){
             output.setText(oldText);
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                side.setBackground(getDrawable(imageId));
+                if(imageId != 0)
+                    side.setBackground(getDrawable(imageId));
                 output.setTextColor(getColor(R.color.colorAccent));
                 output.setTextSize(30);
             }
             else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                main.setBackground(getDrawable(imageId));
+                if(imageId != 0)
+                    main.setBackground(getDrawable(imageId));
                 output.setTextColor(getColor(R.color.colorAccent));
                 output.setTextSize(45);
             }
@@ -229,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     main.setBackgroundResource(0);
                 }
+                imageId = 0;
             }
         });
     }
@@ -236,8 +245,7 @@ public class MainActivity extends AppCompatActivity {
     method to see if user can calculate tip with distinct button pressed
      */
     private boolean canCalcNonCustom(){
-        System.out.println("text in friends "+(numFriends.getText().toString().length() > 0) + " cost: " + (cost.getText().toString().length() > 0)
-                +" pressed: "+ hasPressedSomething);
+        
         return (numFriends.getText().toString().length() > 0) && (cost.getText().toString().length() > 0
         && hasPressedSomething);
     }
